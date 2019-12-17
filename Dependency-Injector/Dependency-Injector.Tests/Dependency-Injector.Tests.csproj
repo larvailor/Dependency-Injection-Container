@@ -56,6 +56,7 @@
     <Compile Include="TestHelpers\IBase.cs" />
     <Compile Include="TestHelpers\ImplFor_IBase.cs" />
     <Compile Include="TestHelpers\InnerDepsImplFor_IBase.cs" />
+    <Compile Include="TestHelpers\RecursionDepsImplFor_IBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

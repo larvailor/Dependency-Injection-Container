@@ -85,5 +85,18 @@ namespace Dependency_Injector.Tests
 
             Assert.AreEqual(typeof(InnerDepsImplFor_IBase), actual.GetType());
         }
+
+
+
+        [TestMethod]
+        [ExpectedException(typeof(StackOverflowException))]
+        public void DI_ShouldThrow_StackOverflowException_IfRecursionDetected()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, RecursionDepsImplFor_IBase>();
+
+            var di = new DependencyInjector(diConfig);
+            var actual = di.Resolve<IBase>();
+        }
     }
 }
