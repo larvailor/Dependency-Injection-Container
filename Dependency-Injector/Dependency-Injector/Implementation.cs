@@ -10,12 +10,16 @@ namespace Dependency_Injector
     {
         // variables
         public Type Type { get; private set; }
+        public bool IsSingleton { get; private set; }
+        public object Singleton { get; set; }
 
 
         // methods
-        public Implementation(Type tImplementation)
+        public Implementation(Type tImplementation, bool isSingleton)
         {
             Type = tImplementation;
+            IsSingleton = isSingleton;
+            Singleton = null;
         }
     }
 }

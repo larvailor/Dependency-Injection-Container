@@ -21,7 +21,7 @@ namespace Dependency_Injector
 
 
 
-        public void Register<TDependency, TImplementation>()
+        public void Register<TDependency, TImplementation>(bool singleton = false)
         {
             Type tDependency = typeof(TDependency);
             Type tImplementation = typeof(TImplementation);
@@ -42,7 +42,21 @@ namespace Dependency_Injector
                 implsForSpecificDependency = new List<Implementation>();
                 dDepImpl[tDependency] = implsForSpecificDependency;
             }
-            implsForSpecificDependency.Add(new Implementation(tImplementation));
+            implsForSpecificDependency.Add(new Implementation(tImplementation, singleton));
+        }
+
+
+
+        public List<Implementation> GetImplementationsForDependency(Type tDependency)
+        {
+            if (dDepImpl.ContainsKey(tDependency))
+            {
+                return dDepImpl[tDependency];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
