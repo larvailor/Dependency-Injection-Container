@@ -98,5 +98,20 @@ namespace Dependency_Injector.Tests
             var di = new DependencyInjector(diConfig);
             var actual = di.Resolve<IBase>();
         }
+
+
+
+        [TestMethod]
+        public void DI_ShouldUse_NewInstance_WhenNotSingleton()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, ImplFor_IBase>(singleton: false);
+
+            var di = new DependencyInjector(diConfig);
+            var actual1 = di.Resolve<IBase>();
+            var actual2 = di.Resolve<IBase>();
+
+            Assert.AreNotSame(actual1, actual2);
+        }
     }
 }
