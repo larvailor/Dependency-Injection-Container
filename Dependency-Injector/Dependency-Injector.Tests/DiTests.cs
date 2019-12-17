@@ -23,5 +23,15 @@ namespace Dependency_Injector.Tests
             Assert.AreEqual(1, values[0].Count);
             Assert.AreEqual("ImplFor_IBase", values[0][0].Type.Name);
         }
+
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DIConfig_ShouldThrow_ArgumentException_IfImplementationIsAbstract()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, AbstractImplFor_IBase>();
+        }
     }
 }

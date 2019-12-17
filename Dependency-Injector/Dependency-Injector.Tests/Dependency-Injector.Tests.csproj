@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelpers\AbstractImplFor_IBase.cs" />
     <Compile Include="TestHelpers\IBase.cs" />
     <Compile Include="TestHelpers\ImplFor_IBase.cs" />
   </ItemGroup>
