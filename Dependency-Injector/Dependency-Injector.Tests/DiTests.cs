@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dependency_Injector.Tests.TestHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -127,6 +128,22 @@ namespace Dependency_Injector.Tests
             var actual2 = di.Resolve<IBase>();
 
             Assert.AreSame(actual1, actual2);
+        }
+
+
+
+        [TestMethod]
+        public void DI_ShouldReturn_MultipleImplementations_ForOneDependency()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, ImplFor_IBase>();
+            diConfig.Register<IBase, ImplFor_IBase_2>();
+
+            var di = new DependencyInjector(diConfig);
+            var actual = di.Resolve<IEnumerable<IBase>>();
+
+            Assert.AreEqual(typeof(ImplFor_IBase), actual.First().GetType());
+            Assert.AreEqual(typeof(ImplFor_IBase_2), actual.Last().GetType());
         }
     }
 }
