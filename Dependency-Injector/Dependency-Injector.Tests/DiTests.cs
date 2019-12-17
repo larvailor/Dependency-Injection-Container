@@ -71,5 +71,19 @@ namespace Dependency_Injector.Tests
 
             Assert.AreEqual(typeof(ImplFor_IBase), actual.GetType());
         }
+
+
+
+        [TestMethod]
+        public void DI_ShouldResolve_WithInnerDependencies()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, InnerDepsImplFor_IBase>();
+
+            var di = new DependencyInjector(diConfig);
+            var actual = di.Resolve<IBase>();
+
+            Assert.AreEqual(typeof(InnerDepsImplFor_IBase), actual.GetType());
+        }
     }
 }
