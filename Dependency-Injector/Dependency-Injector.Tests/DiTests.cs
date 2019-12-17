@@ -113,5 +113,20 @@ namespace Dependency_Injector.Tests
 
             Assert.AreNotSame(actual1, actual2);
         }
+
+
+
+        [TestMethod]
+        public void DI_ShouldUse_SameInstance_WhenSingleton()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, ImplFor_IBase>(singleton: true);
+
+            var di = new DependencyInjector(diConfig);
+            var actual1 = di.Resolve<IBase>();
+            var actual2 = di.Resolve<IBase>();
+
+            Assert.AreSame(actual1, actual2);
+        }
     }
 }
