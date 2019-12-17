@@ -33,5 +33,15 @@ namespace Dependency_Injector.Tests
             var diConfig = new DependencyInjectorConfiguration();
             diConfig.Register<IBase, AbstractImplFor_IBase>();
         }
+
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DIConfig_ShouldThrow_ArgumentException_IfDependencyIsNotAssignableFromImplementation()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBase, ClassWithoutImpl>();
+        }
     }
 }
