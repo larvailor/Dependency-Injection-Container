@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Dependency_Injector
     {
         // variables
         public DependencyInjectorConfiguration DiConfig { get; private set; }
+        public Stack<Type> RecursionStack { get; private set; }
 
 
 
@@ -18,6 +20,7 @@ namespace Dependency_Injector
         public DependencyInjector(DependencyInjectorConfiguration diConfig)
         {
             DiConfig = diConfig;
+            RecursionStack = new Stack<Type>();
         }
 
 
@@ -31,12 +34,19 @@ namespace Dependency_Injector
 
         private object Resolve(Type tDependency)
         {
-            object result = null;
+            if (RecursionStack.Contains(tDependency))
+            {
+                throw new StackOverflowException("Infinite recursion detected");
+            }
+            RecursionStack.Push(tDependency);
 
             if (!DiConfig.dDepImpl.Any())
             {
-                return result;
+                return null;
             }
+
+            // resolving
+            object result = null;
 
             if (DiConfig.dDepImpl.ContainsKey(tDependency))
             {
@@ -50,7 +60,9 @@ namespace Dependency_Injector
             {
                 result = CreateUsingConstructor(tDependency);
             }
-   
+
+            RecursionStack.Pop();
+
             return result;
         }
 
@@ -103,6 +115,10 @@ namespace Dependency_Injector
                     {
                         return result;
                     }
+                }
+                catch (StackOverflowException e) // for handling recursion
+                {
+                    throw e;
                 }
                 catch
                 {
