@@ -43,5 +43,19 @@ namespace Dependency_Injector.Tests
             var diConfig = new DependencyInjectorConfiguration();
             diConfig.Register<IBase, ClassWithoutImpl>();
         }
+
+
+
+        [TestMethod]
+        public void DI_ShouldReturn_Null_IfNotRegistered()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            // register part skipped
+
+            var di = new DependencyInjector(diConfig);
+            var actual = di.Resolve<IBase>();
+
+            Assert.AreEqual(null, actual);
+        }
     }
 }
