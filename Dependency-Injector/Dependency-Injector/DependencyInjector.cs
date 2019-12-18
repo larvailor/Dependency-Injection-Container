@@ -93,25 +93,25 @@ namespace Dependency_Injector
 
         private object HandleSingletonCase(Implementation implementation)
         {
-            object result = null;
             if (implementation.IsSingleton)
             {
-                if (implementation.Singleton != null)
+                if (implementation.Singleton == null)
                 {
-                    result = implementation.Singleton;
+                    lock (implementation)
+                    {
+                        if (implementation.Singleton == null)
+                        {
+                            implementation.Singleton = Resolve(implementation.Type);
+                            return implementation.Singleton;
+                        }
+                    }
                 }
-                else
-                {
-                    result = Resolve(implementation.Type);
-                    implementation.Singleton = result;
-                }
+                return implementation.Singleton;
             }
             else
             {
-                result = Resolve(implementation.Type);
+                return Resolve(implementation.Type);
             }
-            
-            return result;
         }
 
 
