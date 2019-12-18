@@ -54,7 +54,9 @@
     <Compile Include="TestHelpers\AbstractImplFor_IBase.cs" />
     <Compile Include="TestHelpers\ClassWithoutImpl.cs" />
     <Compile Include="TestHelpers\IBase.cs" />
+    <Compile Include="TestHelpers\IBaseWithDependency.cs" />
     <Compile Include="TestHelpers\ImplFor_IBase.cs" />
+    <Compile Include="TestHelpers\ImplFor_IBaseWithDependency.cs" />
     <Compile Include="TestHelpers\ImplFor_IBase_2.cs" />
     <Compile Include="TestHelpers\InnerDepsImplFor_IBase.cs" />
     <Compile Include="TestHelpers\RecursionDepsImplFor_IBase.cs" />

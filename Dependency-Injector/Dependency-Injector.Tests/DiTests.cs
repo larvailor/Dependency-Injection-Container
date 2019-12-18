@@ -145,5 +145,19 @@ namespace Dependency_Injector.Tests
             Assert.AreEqual(typeof(ImplFor_IBase), actual.First().GetType());
             Assert.AreEqual(typeof(ImplFor_IBase_2), actual.Last().GetType());
         }
+
+
+
+        [TestMethod]
+        public void DI_ShouldResolve_WhenGenericDependency()
+        {
+            var diConfig = new DependencyInjectorConfiguration();
+            diConfig.Register<IBaseWithDependency<ImplFor_IBase>, ImplFor_IBaseWithDependency<ImplFor_IBase>>();
+
+            var di = new DependencyInjector(diConfig);
+            var actual = di.Resolve<IBaseWithDependency<ImplFor_IBase>>();
+
+            Assert.AreEqual(typeof(ImplFor_IBaseWithDependency<ImplFor_IBase>), actual.GetType());
+        }
     }
 }
