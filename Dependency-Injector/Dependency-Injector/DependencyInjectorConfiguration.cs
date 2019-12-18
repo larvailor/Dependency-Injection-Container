@@ -23,15 +23,21 @@ namespace Dependency_Injector
 
         public void Register<TDependency, TImplementation>(bool singleton = false)
         {
-            Type tDependency = typeof(TDependency);
-            Type tImplementation = typeof(TImplementation);
+            Register(typeof(TDependency), typeof(TImplementation), singleton);
+        }
 
+
+
+        public void Register(Type tDependency, Type tImplementation, bool singleton = false)
+        {
             if (tImplementation.IsAbstract)
             {
                 throw new ArgumentException("Register failed. Implementation could not be abstract");
             }
 
-            if (!tDependency.IsAssignableFrom(tImplementation))
+            if (!tDependency.IsAssignableFrom(tImplementation)
+                && !tDependency.IsGenericTypeDefinition
+                && !tImplementation.IsGenericTypeDefinition)
             {
                 throw new ArgumentException("Register failed. Dependency is not assignable from implementation");
             }
