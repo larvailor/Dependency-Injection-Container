@@ -61,13 +61,22 @@ namespace Dependency_Injector
             }
             else
             {
-                if (DiConfig.dDepImpl.ContainsKey(tDependency))
+                var implementations = new List<Implementation>();
+                if (tDependency.IsGenericType && DiConfig.dDepImpl.ContainsKey(tDependency.GetGenericTypeDefinition()))
                 {
-                    var implementations = new List<Implementation>(DiConfig.GetImplementationsForDependency(tDependency));
-                    if (implementations.Any())
+                    implementations = new List<Implementation>(DiConfig.GetImplementationsForDependency(tDependency.GetGenericTypeDefinition()));
+                }
+                else
+                {
+                    if (DiConfig.dDepImpl.ContainsKey(tDependency))
                     {
-                        result = HandleSingletonCase(implementations[0]);
+                        implementations = new List<Implementation>(DiConfig.GetImplementationsForDependency(tDependency));
                     }
+                }
+
+                if (implementations.Any())
+                {
+                    result = HandleSingletonCase(implementations[0]);
                 }
                 else
                 {
@@ -110,6 +119,25 @@ namespace Dependency_Injector
         private object CreateUsingConstructor(Type type)
         {
             object result = null;
+
+            if (type.ContainsGenericParameters)
+            {
+                var genericArguments = type.GetGenericArguments();
+                var genericParams = genericArguments.Select(dependency =>
+                {   
+                    var implementations = DiConfig.GetImplementationsForDependency(dependency.BaseType)?.ToArray();
+                    if (implementations == null)
+                    {
+                        return dependency.BaseType;
+                    }
+                    else
+                    {
+                        return implementations.First().Type;
+                    }
+                }).ToArray();
+
+                type = type.MakeGenericType(genericParams);
+            }
 
             var constructorsInfo = type.GetConstructors();
             foreach (var constructorInfo in constructorsInfo)
