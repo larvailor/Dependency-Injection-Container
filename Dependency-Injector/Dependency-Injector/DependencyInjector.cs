@@ -48,17 +48,31 @@ namespace Dependency_Injector
             // resolving
             object result = null;
 
-            if (DiConfig.dDepImpl.ContainsKey(tDependency))
+            if (typeof(IEnumerable).IsAssignableFrom(tDependency))
             {
-                var implementations = new List<Implementation>(DiConfig.GetImplementationsForDependency(tDependency));
-                if (implementations.Any())
+                Type argumentType = tDependency.GetGenericArguments()[0];
+                var implementations = new List<Implementation>(DiConfig.GetImplementationsForDependency(argumentType));
+                var createdArguments = (object[])Activator.CreateInstance(argumentType.MakeArrayType(), new object[] { implementations.Count });
+                for (var i = 0; i < implementations.Count; i++)
                 {
-                    result = HandleSingletonCase(implementations[0]);
+                    createdArguments[i] = HandleSingletonCase(implementations[i]);
                 }
+                result = createdArguments;
             }
             else
             {
-                result = CreateUsingConstructor(tDependency);
+                if (DiConfig.dDepImpl.ContainsKey(tDependency))
+                {
+                    var implementations = new List<Implementation>(DiConfig.GetImplementationsForDependency(tDependency));
+                    if (implementations.Any())
+                    {
+                        result = HandleSingletonCase(implementations[0]);
+                    }
+                }
+                else
+                {
+                    result = CreateUsingConstructor(tDependency);
+                }
             }
 
             RecursionStack.Pop();
